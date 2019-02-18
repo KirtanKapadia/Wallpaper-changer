@@ -12,12 +12,15 @@ import csv
 
 
 class UnsplashWallpaper(object):
-    def __init__(self,api_key, client_id, client_secret, redirect_uri, code,query = None):
+    def __init__(self,api_key, client_id, client_secret, redirect_uri, code,query = None, path = None):
+        self.api_key = api_key
         self.client_id = client_id
         self.client_secret = client_secret
         self.redirect_uri = redirect_uri
         self.code = code
         self.query = query
+        self.path = path
+
 
     #authentication problem it's not working!!!!
     def authentication(self):
@@ -25,30 +28,32 @@ class UnsplashWallpaper(object):
         api = Api(auth)
 
 
-    def client_id(self):
+    def get_client_id(self):
         return self.client_id
-    def client_secret(self):
+    def get_client_secret(self):
         return self.client_secret
-    def redirect_uri(self):
+    def get_redirect_uri(self):
         return self.redirect_uri
-    def code(self):
+    def get_code(self):
         return self.code
-    def api_key(self):
+    def get_api_key(self):
         return self.api_key
 
     def get_link(self):
-        pu = PyUnsplash(api_key)
-        photos = pu.photos(type_= 'random', order_by = 'latest', orientaion = 'landscape' ,count = 1)
+        pu = PyUnsplash(self.api_key)
+        photos = pu.photos(type_= 'random', order_by = 'popular', orientaion = 'landscape' ,count = 3)
         link = []
         for photo in photos.entries:
             photo.refresh()
             data = {'Photo Id':photo.id,'Url':photo.link_download}
             link.append(data)
             #print(data['Url'])
-        self.download_links(Link = data)
+        print(link)
+        #self.download_links(Link = data)
         #self.file_of_links(link)
 
-        #Still buggy need to use csv properly
+
+    #Still buggy need to use csv properly
     def file_of_links(self, link):
         with open('D:\\Links.csv','w') as csvFile:
             fields = ['Photo Id','Url']
